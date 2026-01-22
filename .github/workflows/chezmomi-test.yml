@@ -54,9 +54,7 @@ jobs:
             exe_map = {
               "aws-cli": "aws",
               "docker-cli": "docker",
-              "docker-compose": "docker-compose",
-              "git-lfs": "git-lfs",
-              "sqlite": "sqlite3",
+              "neovim": "nvim",
             }
 
             missing = []
