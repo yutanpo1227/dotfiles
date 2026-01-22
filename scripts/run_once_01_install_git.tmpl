@@ -1,0 +1,48 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+set -eu
+
+if ! command -v git >/dev/null 2>&1; then
+  if command -v brew >/dev/null 2>&1; then
+    brew install git
+  else
+    echo "Homebrew not found; install git manually or install Xcode Command Line Tools." >&2
+    exit 1
+  fi
+fi
+
+if ! git config --global --get init.defaultBranch >/dev/null 2>&1; then
+  git config --global init.defaultBranch main
+fi
+{{- else if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+set -eu
+
+if ! command -v git >/dev/null 2>&1; then
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y git
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y git
+  elif command -v yum >/dev/null 2>&1; then
+    sudo yum install -y git
+  elif command -v pacman >/dev/null 2>&1; then
+    sudo pacman -S --noconfirm git
+  elif command -v zypper >/dev/null 2>&1; then
+    sudo zypper install -y git
+  elif command -v apk >/dev/null 2>&1; then
+    sudo apk add git
+  else
+    echo "git not found and no supported package manager detected." >&2
+    exit 1
+  fi
+fi
+
+if ! git config --global --get init.defaultBranch >/dev/null 2>&1; then
+  git config --global init.defaultBranch main
+fi
+{{- else -}}
+#!/bin/sh
+echo "Unsupported OS for auto-installing git." >&2
+exit 1
+{{- end -}}

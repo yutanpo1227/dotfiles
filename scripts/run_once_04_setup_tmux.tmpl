@@ -1,0 +1,7 @@
+#!/bin/sh
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null || true
+# tmux source は tmux サーバーが起動している場合のみ実行
+if tmux info &>/dev/null; then
+  tmux source ~/.tmux.conf
+fi

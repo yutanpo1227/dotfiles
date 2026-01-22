@@ -1,0 +1,7 @@
+#!/bin/sh
+
+curl -fsSL https://mise.sh/install.sh | sh
+eval "$(~/.local/bin/mise activate zsh)"
+
+mise trust
+mise install
