@@ -55,6 +55,7 @@ jobs:
               "aws-cli": "aws",
               "docker-cli": "docker",
               "neovim": "nvim",
+              "sqlite": "sqlite3",
             }
 
             missing = []
