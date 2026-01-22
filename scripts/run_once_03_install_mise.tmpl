@@ -5,3 +5,12 @@ eval "$(~/.local/bin/mise activate zsh)"
 
 mise trust
 mise install
+
+{{- if eq .chezmoi.os "linux" -}}
+mise use -g btop
+{{- else if eq .chezmoi.os "darwin" -}}
+brew install btop
+{{- else -}}
+echo "Unsupported OS for auto-installing btop." >&2
+exit 1
+{{- end -}}
