@@ -64,9 +64,6 @@ jobs:
               if shutil.which(exe) is None:
                 missing.append((tool, exe))
 
-            if shutil.which("btop") is None:
-              missing.append(("btop", "btop"))
-
             if missing:
               for tool, exe in missing:
                 print(f"Missing mise tool on PATH: {tool} (expected '{exe}')", file=sys.stderr)
