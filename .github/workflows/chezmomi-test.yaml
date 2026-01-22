@@ -1,0 +1,16 @@
+name: test
+on: 
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+      name: chezmoi test
+      runs-on: macos-latest
+      steps:
+        - name: Install chezmoi
+          run: brew install chezmoi
+        - name: Initialize chezmoi
+          run: chezmoi init https://github.com/yutanpo1227/dotfiles.git
+        - name: Apply chezmoi
+          run: chezmoi apply
