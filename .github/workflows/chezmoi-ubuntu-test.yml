@@ -1,0 +1,73 @@
+name: ubuntu-test
+on: 
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+jobs:
+  test:
+      name: chezmoi test
+      runs-on: ubuntu-latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      steps:
+        - name: Install chezmoi
+          run: sh -c "$(wget -qO- get.chezmoi.io)"
+        - name: Initialize chezmoi
+          run: chezmoi init https://github.com/yutanpo1227/dotfiles.git
+        - name: Apply chezmoi
+          run: chezmoi apply
+        - name: Add local bin to PATH
+          run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        - name: Verify commands on PATH
+          run: |
+            set -euo pipefail
+            for cmd in chezmoi curl git zsh mise; do
+              if ! command -v "$cmd" >/dev/null 2>&1; then
+                echo "Missing command on PATH: $cmd" >&2
+                exit 1
+              fi
+            done
+            chezmoi --version
+            curl --version
+            git --version
+            zsh --version
+            mise --version
+        - name: Verify all mise tools on PATH
+          run: |
+            set -euo pipefail
+            eval "$("$HOME/.local/bin/mise" activate bash)"
+            python3 - <<'PY'
+            import os
+            import shutil
+            import sys
+            import tomllib
+
+            config = os.path.expanduser("~/.config/mise/config.toml")
+            with open(config, "rb") as f:
+              data = tomllib.load(f)
+            tools = data.get("tools", {})
+
+            # Map tool names to expected executable names when they differ.
+            exe_map = {
+              "aws-cli": "aws",
+              "docker-cli": "docker",
+              "neovim": "nvim",
+              "sqlite": "sqlite3",
+            }
+
+            missing = []
+            for tool in tools.keys():
+              exe = exe_map.get(tool, tool)
+              if shutil.which(exe) is None:
+                missing.append((tool, exe))
+
+            if missing:
+              for tool, exe in missing:
+                print(f"Missing mise tool on PATH: {tool} (expected '{exe}')", file=sys.stderr)
+              sys.exit(1)
+
+            print(f"Checked {len(tools)} mise tools on PATH.")
+            PY
