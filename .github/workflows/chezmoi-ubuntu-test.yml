@@ -14,7 +14,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       steps:
         - name: Install chezmoi
-          run: sh -c "$(wget -qO- get.chezmoi.io)"
+          run: sh -c "$(wget -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
         - name: Initialize chezmoi
           run: chezmoi init https://github.com/yutanpo1227/dotfiles.git
         - name: Apply chezmoi
