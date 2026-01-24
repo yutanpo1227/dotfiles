@@ -1,4 +1,27 @@
-#!/bin/zsh
+#!/bin/sh
+set -eu
+
+{{- if eq .chezmoi.os "linux" -}}
+if ! command -v zsh >/dev/null 2>&1; then
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y zsh
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y zsh
+  elif command -v yum >/dev/null 2>&1; then
+    sudo yum install -y zsh
+  elif command -v pacman >/dev/null 2>&1; then
+    sudo pacman -S --noconfirm zsh
+  elif command -v zypper >/dev/null 2>&1; then
+    sudo zypper install -y zsh
+  elif command -v apk >/dev/null 2>&1; then
+    sudo apk add zsh
+  else
+    echo "zsh not found and no supported package manager detected." >&2
+    exit 1
+  fi
+fi
+{{- end -}}
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 # install zsh-autosuggestions
