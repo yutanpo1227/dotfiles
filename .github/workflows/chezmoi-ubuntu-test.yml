@@ -14,13 +14,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       steps:
         - name: Install chezmoi
-          run: sh -c "$(wget -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin && export PATH="$HOME/.local/bin:$PATH"
+          run: |
+            set -euo pipefail
+            sh -c "$(wget -qO- https://get.chezmoi.io)" -- -b "$HOME/.local/bin"
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         - name: Initialize chezmoi
           run: chezmoi init https://github.com/yutanpo1227/dotfiles.git
         - name: Apply chezmoi
           run: chezmoi apply
-        - name: Add local bin to PATH
-          run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         - name: Verify commands on PATH
           run: |
             set -euo pipefail
