@@ -15,6 +15,7 @@ jobs:
       steps:
         - name: Install chezmoi
           run: sh -c "$(wget -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
+          run: export PATH="$HOME/.local/bin:$PATH"s
         - name: Initialize chezmoi
           run: chezmoi init https://github.com/yutanpo1227/dotfiles.git
         - name: Apply chezmoi
