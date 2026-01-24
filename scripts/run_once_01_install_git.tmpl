@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "darwin" -}}
-#!/bin/zsh
+#!/bin/sh
 set -eu
 
 if ! command -v git >/dev/null 2>&1; then
@@ -15,7 +15,7 @@ if ! git config --global --get init.defaultBranch >/dev/null 2>&1; then
   git config --global init.defaultBranch main
 fi
 {{- else if eq .chezmoi.os "linux" -}}
-#!/bin/zsh
+#!/bin/sh
 set -eu
 
 if ! command -v git >/dev/null 2>&1; then
@@ -42,7 +42,7 @@ if ! git config --global --get init.defaultBranch >/dev/null 2>&1; then
   git config --global init.defaultBranch main
 fi
 {{- else -}}
-#!/bin/zsh
+#!/bin/sh
 echo "Unsupported OS for auto-installing git." >&2
 exit 1
 {{- end -}}

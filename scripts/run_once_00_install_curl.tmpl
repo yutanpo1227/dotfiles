@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "linux" -}}
-#!/bin/zsh
+#!/bin/sh
 set -euo pipefail
 
 if command -v curl >/dev/null 2>&1; then
@@ -14,10 +14,10 @@ else
   exit 1
 fi
 {{- else if eq .chezmoi.os "darwin" -}}
-#!/bin/zsh
+#!/bin/sh
 exit 0
 {{- else -}}
-#!/bin/zsh
+#!/bin/sh
 echo "Unsupported OS for auto-installing curl." >&2
 exit 1
 {{- end -}}
