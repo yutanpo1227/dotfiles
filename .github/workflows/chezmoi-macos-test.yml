@@ -56,6 +56,7 @@ jobs:
               "docker-cli": "docker",
               "neovim": "nvim",
               "sqlite": "sqlite3",
+              "github-cli": "gh",
             }
 
             missing = []
