@@ -39,7 +39,7 @@ jobs:
         - name: Verify all mise tools on PATH
           run: |
             set -euo pipefail
-            eval "$("$HOME/.local/bin/mise" activate bash)"
+            eval "$("$HOME/.local/bin/mise" env --shell bash)"
             python3 - <<'PY'
             import os
             import shutil

@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 set -eu
 
 curl https://mise.run | sh
-eval "$("$HOME/.local/bin/mise" activate sh)"
+eval "$("$HOME/.local/bin/mise" activate bash)"
 
 mise trust
 mise install -y
