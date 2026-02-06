@@ -36,6 +36,21 @@ jobs:
             git --version
             zsh --version
             mise --version
+        - name: Debug mise uv
+          run: |
+            eval "$("$HOME/.local/bin/mise" env --shell bash)"
+            echo "=== PATH ==="
+            echo "$PATH" | tr ':' '\n'
+            echo "=== mise ls uv ==="
+            "$HOME/.local/bin/mise" ls uv || true
+            echo "=== mise which uv ==="
+            "$HOME/.local/bin/mise" which uv || true
+            echo "=== mise where uv ==="
+            "$HOME/.local/bin/mise" where uv || true
+            echo "=== find uv binary ==="
+            find "$HOME/.local/share/mise" -name "uv" -type f 2>/dev/null || true
+            echo "=== which uv ==="
+            which uv || echo "uv not found in PATH"
         - name: Verify all mise tools on PATH
           run: |
             set -euo pipefail
