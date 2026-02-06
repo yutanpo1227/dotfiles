@@ -1,3 +1,8 @@
+---
+name: ni-package-manager
+description: Node.jsのパッケージマネージャーの差異をniコマンドで吸収し、npm/pnpm/yarn等を統一的に扱うためのガイド
+---
+
 # Node.jsにおけるパッケージマネージャー
 基本的にNode.jsにおいてパッケージマネージャーは複数の種類(npm, pnpmなど)が予想されるためコマンドは`ni`を使って自動的に差異を吸収する。
 よって`npm (run|install)`や`pnpm (run|install)`などは使わないこと
