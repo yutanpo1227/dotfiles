@@ -36,28 +36,13 @@ jobs:
             git --version
             zsh --version
             mise --version
-        - name: Debug mise uv
-          run: |
-            eval "$("$HOME/.local/bin/mise" env --shell bash)"
-            echo "=== PATH ==="
-            echo "$PATH" | tr ':' '\n'
-            echo "=== mise ls uv ==="
-            "$HOME/.local/bin/mise" ls uv || true
-            echo "=== mise which uv ==="
-            "$HOME/.local/bin/mise" which uv || true
-            echo "=== mise where uv ==="
-            "$HOME/.local/bin/mise" where uv || true
-            echo "=== find uv binary ==="
-            find "$HOME/.local/share/mise" -name "uv" -type f 2>/dev/null || true
-            echo "=== which uv ==="
-            which uv || echo "uv not found in PATH"
-        - name: Verify all mise tools on PATH
+        - name: Verify all mise tools
           run: |
             set -euo pipefail
             eval "$("$HOME/.local/bin/mise" env --shell bash)"
             python3 - <<'PY'
             import os
-            import shutil
+            import subprocess
             import sys
             import tomllib
 
@@ -75,16 +60,21 @@ jobs:
               "github-cli": "gh",
             }
 
+            mise = os.path.expanduser("~/.local/bin/mise")
             missing = []
             for tool in tools.keys():
               exe = exe_map.get(tool, tool)
-              if shutil.which(exe) is None:
+              result = subprocess.run(
+                [mise, "exec", "--", "which", exe],
+                capture_output=True,
+              )
+              if result.returncode != 0:
                 missing.append((tool, exe))
 
             if missing:
               for tool, exe in missing:
-                print(f"Missing mise tool on PATH: {tool} (expected '{exe}')", file=sys.stderr)
+                print(f"Missing mise tool: {tool} (expected '{exe}')", file=sys.stderr)
               sys.exit(1)
 
-            print(f"Checked {len(tools)} mise tools on PATH.")
+            print(f"Checked {len(tools)} mise tools.")
             PY
