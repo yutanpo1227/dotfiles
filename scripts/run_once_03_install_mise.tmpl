@@ -1,7 +1,8 @@
-#!/bin/zsh
+#!/bin/sh
+set -eu
 
 curl https://mise.run | sh
-eval "$(~/.local/bin/mise activate zsh)"
+eval "$("$HOME/.local/bin/mise" activate sh)"
 
 mise trust
-mise install
+mise install -y
