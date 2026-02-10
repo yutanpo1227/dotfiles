@@ -68,5 +68,9 @@
       "Write(**/secrets/**)",
       "Bash(wget:*)"
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "npx ccusage@latest statusline"
   }
 }
