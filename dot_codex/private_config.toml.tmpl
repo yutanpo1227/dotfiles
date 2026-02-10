@@ -1,0 +1,26 @@
+{{- $codex := .codex | default (dict) -}}
+{{- $trustMap := get $codex "project_trust" | default (dict) -}}
+model = "gpt-5.3-codex"
+model_reasoning_effort = "xhigh"
+
+[chrome-devtools]
+command = "npx"
+args = ["chrome-devtools-mcp@latest"]
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp@latest"]
+
+
+{{- if gt (len $trustMap) 0 }}
+
+{{- $paths := keys $trustMap | sortAlpha -}}
+{{- range $path := $paths }}
+{{- $level := index $trustMap $path -}}
+{{- if or (eq $level "trusted") (eq $level "untrusted") }}
+[projects."{{ $path }}"]
+trust_level = "{{ $level }}"
+
+{{- end }}
+{{- end }}
+{{- end }}
