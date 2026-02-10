@@ -46,6 +46,7 @@ jobs:
             import subprocess
             import sys
             import tomllib
+            from pathlib import Path
 
             config = os.path.expanduser("~/.config/mise/config.toml")
             with open(config, "rb") as f:
@@ -71,11 +72,13 @@ jobs:
               tool_exists = subprocess.run(
                 [mise, "where", tool],
                 capture_output=True,
+                text=True,
               )
               if tool_exists.returncode != 0:
                 missing_tools.append(tool)
                 continue
 
+              install_dir = tool_exists.stdout.strip()
               candidates = exe_candidates_map.get(tool, (tool,))
               found = False
               for exe in candidates:
@@ -87,16 +90,25 @@ jobs:
                   found = True
                   break
 
+              # Some tools (e.g. uv on Ubuntu) are installed under nested paths
+              # and are not exposed via `mise exec ... command -v`.
               if not found:
-                missing_commands.append((tool, candidates))
+                install_path = Path(install_dir)
+                for exe in candidates:
+                  if any(p.is_file() and os.access(p, os.X_OK) for p in install_path.rglob(exe)):
+                    found = True
+                    break
+
+              if not found:
+                missing_commands.append((tool, candidates, install_dir))
 
             if missing_tools:
               for tool in missing_tools:
                 print(f"Missing mise tool install: {tool}", file=sys.stderr)
             if missing_commands:
-              for tool, candidates in missing_commands:
+              for tool, candidates, install_dir in missing_commands:
                 print(
-                  f"Missing executable for tool {tool}: expected one of {', '.join(repr(c) for c in candidates)}",
+                  f"Missing executable for tool {tool}: expected one of {', '.join(repr(c) for c in candidates)} (install_dir={install_dir})",
                   file=sys.stderr,
                 )
             if missing_tools or missing_commands:
