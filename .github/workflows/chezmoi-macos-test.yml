@@ -41,7 +41,8 @@ jobs:
             eval "$("$HOME/.local/bin/mise" activate bash)"
             python3 - <<'PY'
             import os
-            import shutil
+            import shlex
+            import subprocess
             import sys
             import tomllib
 
@@ -50,25 +51,55 @@ jobs:
               data = tomllib.load(f)
             tools = data.get("tools", {})
 
-            # Map tool names to expected executable names when they differ.
-            exe_map = {
-              "aws-cli": "aws",
-              "docker-cli": "docker",
-              "neovim": "nvim",
-              "sqlite": "sqlite3",
-              "github-cli": "gh",
+            # Tool names and executable names do not always match 1:1.
+            exe_candidates_map = {
+              "aws-cli": ("aws",),
+              "docker-cli": ("docker",),
+              "gemini-cli": ("gemini", "gemini-cli"),
+              "github-cli": ("gh",),
+              "neovim": ("nvim",),
+              "python": ("python3", "python"),
+              "sqlite": ("sqlite3",),
+              "uv": ("uv", "uvx"),
             }
 
-            missing = []
-            for tool in tools.keys():
-              exe = exe_map.get(tool, tool)
-              if shutil.which(exe) is None:
-                missing.append((tool, exe))
+            mise = os.path.expanduser("~/.local/bin/mise")
+            missing_tools = []
+            missing_commands = []
+            for tool in sorted(tools.keys()):
+              tool_exists = subprocess.run(
+                [mise, "where", tool],
+                capture_output=True,
+              )
+              if tool_exists.returncode != 0:
+                missing_tools.append(tool)
+                continue
 
-            if missing:
-              for tool, exe in missing:
-                print(f"Missing mise tool on PATH: {tool} (expected '{exe}')", file=sys.stderr)
+              candidates = exe_candidates_map.get(tool, (tool,))
+              found = False
+              for exe in candidates:
+                check = subprocess.run(
+                  [mise, "exec", tool, "--", "bash", "-lc", f"command -v {shlex.quote(exe)}"],
+                  capture_output=True,
+                )
+                if check.returncode == 0:
+                  found = True
+                  break
+
+              if not found:
+                missing_commands.append((tool, candidates))
+
+            if missing_tools:
+              for tool in missing_tools:
+                print(f"Missing mise tool install: {tool}", file=sys.stderr)
+            if missing_commands:
+              for tool, candidates in missing_commands:
+                print(
+                  f"Missing executable for tool {tool}: expected one of {', '.join(repr(c) for c in candidates)}",
+                  file=sys.stderr,
+                )
+            if missing_tools or missing_commands:
               sys.exit(1)
 
-            print(f"Checked {len(tools)} mise tools on PATH.")
+            print(f"Checked {len(tools)} mise tools.")
             PY
