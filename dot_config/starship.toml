@@ -2,6 +2,7 @@ format = """
 [](fg:#98971a)\
 $username\
 [ ](fg:#98971a)\
+$custom \
 [ ](fg:#3c3836)\
 $directory\
 [](fg:#3c3836 bg:#504945)\
@@ -34,6 +35,30 @@ format = '[ $path ]($style)[$read_only]($style)'
 truncation_length = 0
 truncate_to_repo = false
 use_os_path_sep = true
+
+[custom.hostname]
+when = "true"
+shell = ["bash"]
+command = '''
+case "$(hostname)" in
+    "shokaku")   COLOR=167 ;;  # gruvbox bright red
+    "amagi")     COLOR=142 ;;  # gruvbox bright green
+    "hiryu")     COLOR=214 ;;  # gruvbox bright yellow
+    "zuikaku")   COLOR=109 ;;  # gruvbox bright blue
+    "taiho")     COLOR=208 ;;  # gruvbox bright orange
+    "qsoryu")    COLOR=175 ;;  # gruvbox bright purple
+    "ryujo")     COLOR=108 ;;  # gruvbox bright aqua
+    "hiyou")     COLOR=124 ;;  # gruvbox red
+    "maya")      COLOR=100 ;;  # gruvbox green
+    "junyo")     COLOR=66  ;;  # gruvbox blue
+    "qhiryu")    COLOR=132 ;;  # gruvbox purple
+    *)           COLOR=167 ;;  # gruvbox bright red (fallback)
+esac
+
+# 色付き、文字本体、
+echo -e "\033[38;5;${COLOR}m\033[0m\033[48;5;${COLOR}m\033[38;5;15m@ $(hostname) \033[0m\033[38;5;${COLOR}m\033[0m"
+'''
+format = "$output"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
