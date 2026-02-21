@@ -52,7 +52,7 @@ case "$(hostname)" in
     "maya")      COLOR=100 ;;  # gruvbox green
     "junyo")     COLOR=66  ;;  # gruvbox blue
     "qhiryu")    COLOR=132 ;;  # gruvbox purple
-    *)           COLOR=167 ;;  # gruvbox bright red (fallback)
+    *)           COLOR=108 ;;  # gruvbox bright aqua (fallback)
 esac
 
 # 色付き、文字本体、
