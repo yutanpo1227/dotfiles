@@ -25,13 +25,15 @@ export PATH="$PATH:/Applications/Blender.app/Contents/MacOS"
 # starship init
 command -v starship &>/dev/null && eval "$(starship init zsh)"
 
-# Zellij Setting
-export ZELLIJ_HOST_TAG="$(hostname -s)"
-export ZELLIJ_SOCKET_DIR="/run/user/$UID/zellij-${ZELLIJ_HOST_TAG}"
-export ZELLIJ_SESSION_INFO_CACHE_DIR="/run/user/$UID/zellij-session-info-${ZELLIJ_HOST_TAG}"
-mkdir -p "$ZELLIJ_SOCKET_DIR" "$ZELLIJ_SESSION_INFO_CACHE_DIR"
-chmod 700 "$ZELLIJ_SOCKET_DIR" "$ZELLIJ_SESSION_INFO_CACHE_DIR"
-# End Zellij Setting
+if [[ "$USER" == "komyu" ]]; then
+  # Zellij Setting
+  export ZELLIJ_HOST_TAG="$(hostname -s)"
+  export ZELLIJ_SOCKET_DIR="/home/$USER/zellij-${ZELLIJ_HOST_TAG}"
+  export ZELLIJ_SESSION_INFO_CACHE_DIR="/home/$USER/zellij-session-info-${ZELLIJ_HOST_TAG}"
+  mkdir -p "$ZELLIJ_SOCKET_DIR" "$ZELLIJ_SESSION_INFO_CACHE_DIR"
+  chmod 700 "$ZELLIJ_SOCKET_DIR" "$ZELLIJ_SESSION_INFO_CACHE_DIR"
+  # End Zellij Setting
+fi
 
 # aliases (macOS only)
 [[ "$OSTYPE" == "darwin"* ]] && alias chrome='osascript -e "tell application \"Google Chrome\" to make new window"'
