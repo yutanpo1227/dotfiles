@@ -28,8 +28,8 @@ command -v starship &>/dev/null && eval "$(starship init zsh)"
 if [[ "$USER" == "komyu" ]]; then
   # Zellij Setting
   export ZELLIJ_HOST_TAG="$(hostname -s)"
-  export ZELLIJ_SOCKET_DIR="/home/$USER/zellij-${ZELLIJ_HOST_TAG}"
-  export ZELLIJ_SESSION_INFO_CACHE_DIR="/home/$USER/zellij-session-info-${ZELLIJ_HOST_TAG}"
+  export ZELLIJ_SOCKET_DIR="/home/$USER/zellij/zellij-${ZELLIJ_HOST_TAG}"
+  export ZELLIJ_SESSION_INFO_CACHE_DIR="/home/$USER/zellij/zellij-session-info-${ZELLIJ_HOST_TAG}"
   mkdir -p "$ZELLIJ_SOCKET_DIR" "$ZELLIJ_SESSION_INFO_CACHE_DIR"
   chmod 700 "$ZELLIJ_SOCKET_DIR" "$ZELLIJ_SESSION_INFO_CACHE_DIR"
   # End Zellij Setting
