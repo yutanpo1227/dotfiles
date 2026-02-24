@@ -6,3 +6,7 @@ eval "$("$HOME/.local/bin/mise" activate bash)"
 
 mise trust
 mise install -y
+
+{{ if eq .chezmoi.os "linux" -}}
+mise use -g btop
+{{ end -}}
