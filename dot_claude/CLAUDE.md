@@ -50,6 +50,19 @@
 5. **Document Results**: Add review section to `tasks/todo.md`
 6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
 
+## Codex Review（必須）
+
+OpenAI Codex CLIによるレビューを以下の2タイミングで必ず実施すること。
+スキル: `~/.claude/skills/codex-review/`
+
+### レビュータイミング
+1. **Plan作成完了時**: プランを書き終えたら `bash ~/.claude/skills/codex-review/scripts/review-plan.sh` でプランの設計レビューを実施
+2. **実装完了時**: コード変更が完了したら `bash ~/.claude/skills/codex-review/scripts/review-code.sh` でコードレビューを実施
+
+### エラー時の対応
+- `codex` コマンドが使えない場合やレビューが失敗した場合は**スキップしてユーザーに通知**する
+- レビュー失敗で作業をブロックしないこと
+
 ## Core Principles
 
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
