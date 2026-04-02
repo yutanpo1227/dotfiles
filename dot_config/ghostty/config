@@ -51,3 +51,4 @@
 theme = Gruvbox Dark
 window-padding-x = 0
 font-size = 12
+term = xterm-256color
