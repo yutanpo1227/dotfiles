@@ -1,0 +1,19 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Funk.aiff"
+          },
+	  {
+            "type": "command",
+            "command": "/Users/yuukomazawa/.codex/runcat-hook.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
