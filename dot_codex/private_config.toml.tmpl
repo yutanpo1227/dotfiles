@@ -11,10 +11,6 @@ args = ["chrome-devtools-mcp@latest"]
 command = "npx"
 args = ["-y", "@upstash/context7-mcp@latest"]
 
-[mcp_servers.serena]
-command = "uvx"
-args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex", "--enable-web-dashboard=false"]
-
 model_context_window = 272000
 model_auto_compact_token_limit = 240000
 
