@@ -1,7 +1,7 @@
 {{- $codex := .codex | default (dict) -}}
 {{- $trustMap := get $codex "project_trust" | default (dict) -}}
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-5.6"
+model_reasoning_effort = "medium"
 
 [chrome-devtools]
 command = "npx"
